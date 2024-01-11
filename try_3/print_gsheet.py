@@ -12,7 +12,7 @@ def extract_gsheet_link(html_content):
         return link['href']
     return None
 
-def print_gsheet(year, month, date):
+def print_gsheet(date, month, year):
     # use your email id here
     username = '21f1007026@ds.study.iitm.ac.in'
     from app_pwd import pwd
@@ -71,4 +71,4 @@ def print_gsheet(year, month, date):
     imap.logout()
 
 # Call the function with the desired date
-print_gsheet(2024, 1, 5)
+print_gsheet(11, 1, 2024)
