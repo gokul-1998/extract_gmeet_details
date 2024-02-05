@@ -1,7 +1,6 @@
-import os
-import datetime
-import email
+    # import required libraries
 import imaplib
+import email
 from email.header import decode_header
 from bs4 import BeautifulSoup  # Make sure to install BeautifulSoup using: pip install beautifulsoup4
 
@@ -12,49 +11,68 @@ def extract_gsheet_link(html_content):
         return link['href']
     return None
 
+import webbrowser
+import os
+
 def print_gsheet(gmeet_link,date, month, year,no_of_days=1):
     # use your email id here
-    username = '21f1007026@ds.study.iitm.ac.in'
+    username = 'mentor-admin@study.iitm.ac.in'
     from app_pwd import pwd
     password = pwd
 
-    # create an IMAP4 class with SSL 
+    # create a imap object
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    # authenticate
-    imap.login(username, password)
 
-    # select the mailbox you want to delete in
-    # if you want SPAM, use "INBOX.SPAM"
-    imap.select('"[Gmail]/All Mail"', readonly = True)
+    # login
+    result = imap.login(username, password)
+
+    # Use "[Gmail]/Sent Mails" for fetching
+    # mails from Sent Mails. 
+    imap.select('"[Gmail]/All Mail"', 
+    readonly = True) 
+
+    # typ, msgnums = imap.search(None, 'FROM', '"LDJ"')
+    import datetime
 
     # specify date range
     start_date = datetime.date(year, month, date)
-    end_date = start_date + datetime.timedelta(no_of_days)
-    end_date=start_date
-    print(start_date)
-    print(end_date)
+    
+    # start_date = datetime.date(2024, 1, 10)
+    # the above date is in YYYY, M, D format
+    end_date = start_date + datetime.timedelta(1)
+
     # format dates for IMAP
     start_str = start_date.strftime("%d-%b-%Y")
     end_str = end_date.strftime("%d-%b-%Y")
 
-    # search for specific mail by sender
+    # search for emails between start date and end date
     res, messages = imap.search(None, '(SINCE "{}" BEFORE "{}")'.format(start_str, end_str))
     messages = messages[0].split(b' ')
 
     for mail in messages:
+        # print("inside mail")
         _, msg = imap.fetch(mail, "(BODY[])")
         email_message = email.message_from_bytes(msg[0][1])
 
         if email_message["From"] == "meetings-noreply@google.com":
+            # print(f'From: {email_message["From"]} {email_message["Date"]}')
+            print(f'Subject: {email_message["Subject"]}')
+            # print(f'Content-Type: {email_message.get_content_type()}')
+            # print(email_message)
+            # print()
+            # print(extract_gsheet_link(email_message))
             
+            # break
             
             # if the email message is multipart
             if email_message.is_multipart():
                 for part in email_message.get_payload():
                     # if the content type is text/html
+                    print("###############333",part.get_content_type())
                     if part.get_content_type() == "text/html":
                         body = part.get_payload(decode=True)
                         gsheet_link = extract_gsheet_link(body)
+                        print("@@@@@@@@@@@@@@@",gsheet_link)
                         if gsheet_link and gmeet_link in email_message["Subject"]:
                             print(f'date: {email_message["Date"]}')
                             
@@ -100,4 +118,4 @@ def get_month_start_date_and_end_date(year, month):
     return start_date.day,start_date.month,start_date.year, diff.days
 
 gmeet_link="fsa-vtgo-atp"
-print_gsheet(gmeet_link,*get_month_start_date_and_end_date(2024, 1))
+print_gsheet(gmeet_link,31, 1, 2024)

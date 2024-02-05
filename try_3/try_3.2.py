@@ -54,8 +54,8 @@ def print_emails(year,month,date):
             if isinstance(response, tuple):
                 msg = email.message_from_bytes(response[1])
                 print("#########################################################################")
-                print(msg["From"])
-                print(msg["Date"])
+                # print(msg["From"])
+                # print(msg["Date"])
                 if msg["From"]=="meetings-noreply@google.com":
                     print(msg["Date"])
                     print(msg["Subject"])
@@ -64,5 +64,5 @@ def print_emails(year,month,date):
                             body = part.get_payload(decode = True)
                             print(f'Body: {body.decode("UTF-8")}', )
 
-print_emails(2024,1,10)
+print_emails(2024,1,21)
 # print_emails(2023,11,10)
