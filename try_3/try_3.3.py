@@ -17,6 +17,7 @@ import os
 def print_gsheet(gmeet_link,date, month, year,no_of_days=1):
     # use your email id here
     username = 'mentor-admin@study.iitm.ac.in'
+    username="21f1007026@ds.study.iitm.ac.in"
     from app_pwd import pwd
     password = pwd
 
@@ -25,7 +26,7 @@ def print_gsheet(gmeet_link,date, month, year,no_of_days=1):
 
     # login
     result = imap.login(username, password)
-
+    print("login result",result)
     # Use "[Gmail]/Sent Mails" for fetching
     # mails from Sent Mails. 
     imap.select('"[Gmail]/All Mail"', 
@@ -51,14 +52,15 @@ def print_gsheet(gmeet_link,date, month, year,no_of_days=1):
 
     for mail in messages:
         # print("inside mail")
+        
         _, msg = imap.fetch(mail, "(BODY[])")
         email_message = email.message_from_bytes(msg[0][1])
-
+        print(email_message["From"])
         if email_message["From"] == "meetings-noreply@google.com":
             # print(f'From: {email_message["From"]} {email_message["Date"]}')
             print(f'Subject: {email_message["Subject"]}')
             # print(f'Content-Type: {email_message.get_content_type()}')
-            # print(email_message)
+            print(email_message)
             # print()
             # print(extract_gsheet_link(email_message))
             
@@ -73,7 +75,7 @@ def print_gsheet(gmeet_link,date, month, year,no_of_days=1):
                         body = part.get_payload(decode=True)
                         gsheet_link = extract_gsheet_link(body)
                         print("@@@@@@@@@@@@@@@",gsheet_link)
-                        if gsheet_link and gmeet_link in email_message["Subject"]:
+                        if gsheet_link :
                             print(f'date: {email_message["Date"]}')
                             
                             # to get indian time for the above
@@ -118,4 +120,4 @@ def get_month_start_date_and_end_date(year, month):
     return start_date.day,start_date.month,start_date.year, diff.days
 
 gmeet_link="fsa-vtgo-atp"
-print_gsheet(gmeet_link,31, 1, 2024)
+print_gsheet(gmeet_link,4, 2, 2024)
