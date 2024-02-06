@@ -13,9 +13,10 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # The ID and range of a sample spreadsheet.
 # SAMPLE_SPREADSHEET_ID = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-SAMPLE_SPREADSHEET_ID="1-z8W6FjibtSqCDE4mFuBQskVveLr8FZNTAw89_TEX-Y"
+SAMPLE_SPREADSHEET_ID="1Kpw1nWqeM8Rstb3E_6wLfxlgqVsaW8AZMeP6DrRC8i8"
 # SAMPLE_RANGE_NAME = "Attendees!A1:E"
 # to get the entire sheet
+
 SAMPLE_RANGE_NAME = "Attendees!A1:Z"
 
 
@@ -35,7 +36,7 @@ def main():
       creds.refresh(Request())
     else:
       flow = InstalledAppFlow.from_client_secrets_file(
-          "jjj.json", SCOPES
+          "mentor_cred.json", SCOPES
       )
       creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
