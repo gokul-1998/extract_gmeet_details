@@ -1,2 +1,4 @@
 **__pycache__**
 app_pwd.py
+env
+*.json
